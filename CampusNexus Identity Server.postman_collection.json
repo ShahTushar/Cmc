@@ -1,0 +1,100 @@
+{
+	"variables": [],
+	"info": {
+		"name": "CampusNexus Identity Server",
+		"_postman_id": "ba85cd1e-2040-7bda-e574-2b49d18a17b7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Token from Identity Server",
+			"request": {
+				"url": "http://wks0395:9091/identity/connect/token",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "NexusStudentApi",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_Id",
+							"value": "ClientCredentialsSampleApp",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_Secret",
+							"value": "DE2C2423-0C66-4BC5-9735-DF04503E8FAA",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "AddressType with OAuth 2.0",
+			"request": {
+				"url": {
+					"raw": "http://localhost/Cmc.Nexus.Web/ds/campusnexus/AddressTypes?$top=15&$filter=IsActive eq true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"Cmc.Nexus.Web",
+						"ds",
+						"campusnexus",
+						"AddressTypes"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "15",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "$filter",
+							"value": "IsActive eq true",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Il9hMVlRLUhfb1MyYjQ4cTdHR2FuU1Jna3VsWSIsImtpZCI6Il9hMVlRLUhfb1MyYjQ4cTdHR2FuU1Jna3VsWSJ9.eyJpc3MiOiJDbWMuTmV4dXMuU3RzIiwiYXVkIjoiQ21jLk5leHVzLlN0cy9yZXNvdXJjZXMiLCJleHAiOjE1MDI5ODY0NzAsIm5iZiI6MTUwMjk4Mjg3MCwiY2xpZW50X2lkIjoiQ2xpZW50Q3JlZGVudGlhbHNTYW1wbGVBcHAiLCJzY29wZSI6Ik5leHVzU3R1ZGVudEFwaSJ9.RabdWG3d-3n1QJ_IRu-vV2oqEhp-gWLcP9CfQyHhinAInKwYnLaoH0yVVm-bFe774EKyn3-pNibvvF3fk2J63QHt6ywj26qkcAAgcb-rzX4gAdqzoJiKUm3XpG_nwouKZsVpc_I_GFdTcezgSD0a4yunerwNTMTYq3dEe-2aA2uGy2Xee-oiwHvCZcBX7501zatJr7sM4uxi_RDez0nCOsFLJ6fYs_84gPDAPNpq1pFykn-xeN8C2XRJgG75838dSXtnf4SaK1zFtGgvWdlCzZzQdzZ5p42nJ_4hFBP-mpGT-k3yMZ_BXnS7S2O7Ywvbtwap2WpzLReR2MKGb2fv0w",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

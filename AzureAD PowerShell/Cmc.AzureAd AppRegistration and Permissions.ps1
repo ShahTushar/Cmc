@@ -4,7 +4,7 @@
 #  ====== ********* STARTS - UPDATE ENVIRONMENT SPECIFIC VALUES *********  ====== 
 
 # Update with your tenantId
-$tenantId = 'b59e8db6-89f7-4256-bbb5-9ac2e2407da1'
+$tenantId = '**UPDATE WITH TENANT ID**'
 
 #  Update name and URL of each application 
 

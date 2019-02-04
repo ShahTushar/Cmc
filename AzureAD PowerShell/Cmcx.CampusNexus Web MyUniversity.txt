@@ -1,0 +1,28 @@
+Application Details for the Cmcx.CampusNexus Web MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.CampusNexus Web MyUniversity
+Application Id:   	fb686eef-2785-45be-93ec-1ccf218673af
+Secret Key:       	MWEwZTMyY2MtYjJmZC00YmUxLTljM2EtMjQzNGM0YTliNGE0=
+	
+Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=fb686eef-2785-45be-93ec-1ccf218673af&state=12345&redirect_uri=https://xportal.myuniversity.edu/
+
+Application Details for the Cmcx.CampusNexus Web MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.CampusNexus Web MyUniversity
+Application Id:   	5b28929e-337e-4e27-aac5-e69a99e72ac8
+Secret Key:       	MzYzMzVmZTYtMjNkNi00MTNlLWJkN2UtZjU0Y2QyOGEzOGNj=
+	
+*** ATTENTION: Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=5b28929e-337e-4e27-aac5-e69a99e72ac8&state=12345&redirect_uri=http://xwebclient.myuniversity.edu/Account/ExternalLoginCallback?loginProvider=Azure&returnUrl=
+
+Application Details for the Cmcx.CampusNexus Web MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.CampusNexus Web MyUniversity
+Application Id:   	58e1cb0f-fdc9-454f-8912-c0806e9a2e28
+Secret Key:       	OWZmYTJhZjUtMDBkMi00ODExLTg0ZTktMGE2ZTcxYTE4OWQw=
+	
+*** ATTENTION: 
+	Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=58e1cb0f-fdc9-454f-8912-c0806e9a2e28&state=12345&redirect_uri=http://xwebclient.myuniversity.edu/Account/ExternalLoginCallback?loginProvider=Azure&returnUrl=
+

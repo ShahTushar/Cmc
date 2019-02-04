@@ -4,7 +4,7 @@
 #  ====== ********* STARTS - UPDATE ENVIRONMENT SPECIFIC VALUES *********  ====== 
 
 # Update with your tenantId
-$tenantId = '**Update TenantId**'
+$tenantId = 'b59e8db6-89f7-4256-bbb5-9ac2e2407da1'
 
 #  Update name and URL of each application 
 
@@ -18,7 +18,7 @@ $webapps.Add("Cmc.CrmWorkspace","http://CrmWorkspaceUrl/")
 
 $portalAppName = "Cmc.Portal MyUniversity"
 $portalAppURI = "https://portal.myuniversity.edu/"
-
+ 
 $cnsWebAppName = "Cmc.CampusNexus Web MyUniversity"
 $studentWebClientAppURI = "http://webclient.myuniversity.edu/"
 
@@ -88,20 +88,48 @@ $appReplyURL2 =$studentWebClientAppURI+"Account/OAuthTokenRedirect"
 if(!($myApp = Get-AzureADApplication -Filter "DisplayName eq '$($cnsWebAppName)'"  -ErrorAction SilentlyContinue))
 {
 	#Prepare permission set
-	
-	# PowerBI
-	$PowerBiSvcPrincipal = Get-AzureADServicePrincipal -All $true | ? { $_.DisplayName -match "Power BI Service" }
-	$reqPowerBI = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
-	$reqPowerBI.ResourceAppId = $PowerBiSvcPrincipal.AppId
+	$permSet = New-Object System.Collections.ArrayList
+	$permSet.Add($reqWinAd)
 
-	#Delegated Permissions
-	#Access PowerBI workspaces as signed in user
-	$powerBidelPermission1 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "b2f1b2fa-f35c-407c-979c-a858a808ba85","Scope" #View all workspaces
-	$powerBidelPermission2 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "4ae1bf56-f562-4747-b7bc-2fa0874ed46f","Scope" #View all Reports (preview)
-	$powerBidelPermission3 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "2448370f-f988-42cd-909c-6528efd67c1a","Scope" #View all Dashboards (preview)
+	# Add PowerBI permissions if enabled
+	$PowerBiSvcPrincipal = Get-AzureADServicePrincipal -All $true | ? { $_.DisplayName -match "Power BI Service" }
+	if($PowerBiSvcPrincipal){
+		$reqPowerBI = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
+		$reqPowerBI.ResourceAppId = $PowerBiSvcPrincipal.AppId
+
+		#Delegated Permissions
+		#Access PowerBI workspaces as signed in user
+		$powerBidelPermission1 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "b2f1b2fa-f35c-407c-979c-a858a808ba85","Scope" #View all workspaces
+		$powerBidelPermission2 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "4ae1bf56-f562-4747-b7bc-2fa0874ed46f","Scope" #View all Reports (preview)
+		$powerBidelPermission3 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "2448370f-f988-42cd-909c-6528efd67c1a","Scope" #View all Dashboards (preview)
 	
-	$reqPowerBI.ResourceAccess = $powerBidelPermission1,$powerBidelPermission2,$powerBidelPermission3
+		$reqPowerBI.ResourceAccess = $powerBidelPermission1,$powerBidelPermission2,$powerBidelPermission3
+		$permSet.Add($reqPowerBI)
+	} else {
+		$msg = "Cannot add PowerBI permissions to CampusNexus Student registration."
+		Write-Host $msg -ForegroundColor Red 
+		$msg >> $logfile
+	}
 	
+	# Microsoft Graph Permissions to be used by User sync service
+	$GraphSvcPrincipal = Get-AzureADServicePrincipal -All $true | ? { $_.DisplayName -match "Microsoft Graph" }
+	if($GraphSvcPrincipal) {
+		$reqGraph = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
+		$reqGraph.ResourceAppId = $GraphSvcPrincipal.AppId
+
+		##Delegated Permissions
+		#$delPermission1 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "0e263e50-5827-48a4-b97c-d940288653c7","Scope" #Access Directory as the signed in user
+
+		##Application Permissions
+		$appPermissionReadDirData = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "7ab1d382-f21e-4acd-a863-ba3e13f7da61","Role" #Read directory data
+		$reqGraph.ResourceAccess = $appPermissionReadDirData
+		$permSet.Add($reqGraph)
+	} else {
+		$msg = "Cannot add Microsoft Graph permissions to CampusNexus Student registration. User sync service will fail without this permission"
+		Write-Host $msg -ForegroundColor Red 
+		$msg >> $logfile
+	}
+
 	#Generate client secrete
 	$Guid = New-Guid
 	$startDate = Get-Date
@@ -114,17 +142,20 @@ if(!($myApp = Get-AzureADApplication -Filter "DisplayName eq '$($cnsWebAppName)'
 	
 	Write-Host "Registering: - $($cnsWebAppName): $($studentWebClientAppURI)"  -ForegroundColor Green 
 	
-    $myApp = New-AzureADApplication -DisplayName $cnsWebAppName -IdentifierUris $studentWebClientAppURI -Homepage $studentWebClientAppURI -ReplyUrls @($appReplyURL1,$appReplyURL2) -PasswordCredentials $PasswordCredential -RequiredResourceAccess @($reqWinAd,$reqPowerBI)
+    $myApp = New-AzureADApplication -DisplayName $cnsWebAppName -IdentifierUris $studentWebClientAppURI -Homepage $studentWebClientAppURI -ReplyUrls @($appReplyURL1,$appReplyURL2) -PasswordCredentials $PasswordCredential -RequiredResourceAccess $permSet
 	$AppDetailsOutput = "Application Details for the $cnsWebAppName application:
 =========================================================
 Application Name: 	$cnsWebAppName
 Application Id:   	$($myApp.AppId)
 Secret Key:       	$($PasswordCredential.Value)
+	
+*** ATTENTION: 
+Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=$($myApp.AppId)&state=12345&redirect_uri=$($appReplyURL2)
 "
 	Write-Host $AppDetailsOutput
 	Write-Host
 	$AppDetailsOutput | Add-Content -Path "$($cnsWebAppName).txt", $logfile
-
 }
 else
 {
@@ -172,6 +203,10 @@ if(!($myApp = Get-AzureADApplication -Filter "DisplayName eq '$($portalAppName)'
 Application Name: 	$portalAppName
 Application Id:   	$($myApp.AppId)
 Secret Key:       	$($PasswordCredential.Value)
+
+*** ATTENTION: 
+Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=$($myApp.AppId)&state=12345&redirect_uri=$($portalAppURI)
 "
 	Write-Host $AppDetailsOutput
 	$AppDetailsOutput | Add-Content -Path "$($portalAppName).txt",$logfile 

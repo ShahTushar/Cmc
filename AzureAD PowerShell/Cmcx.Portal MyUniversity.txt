@@ -1,0 +1,28 @@
+Application Details for the Cmcx.Portal MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.Portal MyUniversity
+Application Id:   	22774417-74f4-4e25-a02c-c2db36b645a9
+Secret Key:       	MWYwMDQ5NDctYzYzYy00MzcxLWJlMGMtNTU0YWJmOTFhMzcz=
+
+Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=22774417-74f4-4e25-a02c-c2db36b645a9&state=12345&redirect_uri=https://xportal.myuniversity.edu/
+
+Application Details for the Cmcx.Portal MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.Portal MyUniversity
+Application Id:   	2cd144d8-a639-4ced-9f11-7274532bc387
+Secret Key:       	Mzc1YTNhMTktNTQ3ZS00MzkzLTlkZmUtNGVlODMwODE4OTJl=
+
+*** ATTENTION: Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=2cd144d8-a639-4ced-9f11-7274532bc387&state=12345&redirect_uri=https://xportal.myuniversity.edu/
+
+Application Details for the Cmcx.Portal MyUniversity application:
+=========================================================
+Application Name: 	Cmcx.Portal MyUniversity
+Application Id:   	3d192bcd-4118-40b5-9f26-96da071d0e96
+Secret Key:       	MGJlOTdmNzQtYTAzZC00OWE1LTkwOGUtM2FlZTNlOTNlZGI4=
+
+*** ATTENTION: 
+Copy following URL in browser and complete admin consent:
+https://login.microsoftonline.com/common/adminconsent?client_id=3d192bcd-4118-40b5-9f26-96da071d0e96&state=12345&redirect_uri=https://xportal.myuniversity.edu/
+

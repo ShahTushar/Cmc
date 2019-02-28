@@ -3,8 +3,6 @@
 
 #  ====== ********* STARTS - UPDATE ENVIRONMENT SPECIFIC VALUES *********  ====== 
 
-# Update with your tenantId
-$tenantId = 'b59e8db6-89f7-4256-bbb5-9ac2e2407da1'
 
 #  Update name and URL of each application 
 
@@ -24,7 +22,6 @@ $studentWebClientAppURI = "http://webclient.myuniversity.edu/"
 
 #  ====== ********* ENDS - UPDATE ENVIRONMENT SPECIFIC VALUES *********  ======
 
-
 $logfile = "App Registration Log-$(get-date -f yyyy-MM-dd).txt"
 "------------ App registartion Begin $(Get-Date) ------------" >> $logfile
 
@@ -38,12 +35,23 @@ Write-Host "  $($cnsWebAppName): $($studentWebClientAppURI)"
 Write-Host "`nPress any key to continue or CTRL+C to quit: "  -ForegroundColor Green -NoNewline
 Read-Host 
 
-Install-Module AzureAD
+#Install Azure-Module if necessary
+if (!(Get-Module -ListAvailable -Name AzureAD*)) {
+	if(!(([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544"))
+	{
+		Write-Host "Not running as admin, please restart PowerShell in Administrator Mode."  -ForegroundColor Red -BackgroundColor White
+		exit
+	}
+	Write-Host "Installing AzureAD module `n"
+	"Installing AzureAD module `n" >> $logfile
+    Install-Module AzureAD
+}
+
 # ====== 1. Connect with your AzureAD (replace tenantid) ======
-Connect-AzureAD -TenantId $tenantId
+Connect-AzureAD 
 $currentSession = Get-AzureADCurrentSessionInfo
-Write-Host "Logged in as $($currentSession.Account)`n"
-"Logged in as $($currentSession.Account)`n" >> $logfile
+Write-Host "Logged in as $($currentSession.Account) in Tenant $($currentSession.TenantId) `n"
+"Logged in as $($currentSession.Account) in Tenant $($currentSession.TenantId) `n" >> $logfile
 
 # ====== 2. Define Global permission set to be used by all Apps ======
 
@@ -55,7 +63,6 @@ $reqWinAd.ResourceAppId = $winAdSvcPrincipal.AppId
 #Sign you in and read your profile
 $delPermission3 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList "311a71cc-e848-46a1-bdf8-97ff7156d8e6","Scope" #Sign you in and read your profile
 $reqWinAd.ResourceAccess = $delPermission3
-
 
 # ====== 3. App Registration for all the apps except Portal and WebClient  ======
 foreach ($h in $webapps.GetEnumerator()) {

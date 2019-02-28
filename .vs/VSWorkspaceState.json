@@ -4,5 +4,6 @@
     "\\AzureAD PowerShell",
     "\\Nexus.Api.OAuth"
   ],
+  "SelectedNode": "\\AzureAD PowerShell\\Cmc.AzureAd AppRegistration and Permissions.ps1",
   "PreviewInSolutionExplorer": false
 }
